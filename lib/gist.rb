@@ -133,11 +133,11 @@ module Gist
   # @param [String] user
   #
   # see https://developer.github.com/v3/gists/#list-gists
-  def list_gists(user = "")
+  def list_gists(access_token)
     url = "#{base_path}"
 
-    if user == ""
-      access_token = auth_token()
+    if access_token
+      # access_token = auth_token()
       if access_token.to_s != ''
         url << "/gists?access_token=" << CGI.escape(access_token)
 
@@ -149,14 +149,6 @@ module Gist
       else
         raise Error, "Not authenticated. Use 'gist --login' to login or 'gist -l username' to view public gists."
       end
-
-    else
-      url << "/users/#{user}/gists"
-
-      request = Net::HTTP::Get.new(url)
-      response = http(api_url, request)
-
-      pretty_gist(response)
     end
   end
 
